@@ -224,6 +224,7 @@ func (e *Docker) create(ctx context.Context, spec *Spec, step *Step, output io.W
 			return pullerr
 		}
 	}
+	fmt.Println("Spec:", spec.SecretsRequired)
 
 	var secretErrors []string
 	for _, secret := range step.Secrets {
