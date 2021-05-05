@@ -50,7 +50,7 @@ func TestParse(t *testing.T) {
 				Depth: 50,
 			},
 			PullSecrets:     []string{"dockerconfigjson"},
-			SecretsRequired: &secretsRequired,
+			SecretsRequired: secretsRequired,
 			Trigger: manifest.Conditions{
 				Branch: manifest.Condition{
 					Include: []string{"master"},

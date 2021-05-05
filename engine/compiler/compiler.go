@@ -189,9 +189,7 @@ func (c *Compiler) Compile(ctx context.Context, args runtime.CompilerArgs) runti
 	fmt.Println("Config:", c.SecretsRequired)
 	secretsRequired := c.SecretsRequired
 	fmt.Println("Pipeline:", pipeline.SecretsRequired)
-	if s := pipeline.SecretsRequired; s != nil {
-		secretsRequired = *s
-	}
+	secretsRequired = pipeline.SecretsRequired
 	fmt.Println("Result:", secretsRequired)
 	spec := &engine.Spec{
 		Network: engine.Network{
