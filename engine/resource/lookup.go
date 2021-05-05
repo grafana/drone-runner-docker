@@ -6,6 +6,7 @@ package resource
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/drone/runner-go/manifest"
 )
@@ -16,7 +17,9 @@ func Lookup(name string, manifest *manifest.Manifest) (manifest.Resource, error)
 		if !isNameMatch(resource.GetName(), name) {
 			continue
 		}
+		fmt.Println("Lookup1:", resource)
 		if pipeline, ok := resource.(*Pipeline); ok {
+			fmt.Println("Lookup2:", pipeline)
 			return pipeline, nil
 		}
 	}
