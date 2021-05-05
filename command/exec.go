@@ -62,7 +62,6 @@ type execCommand struct {
 }
 
 func (c *execCommand) run(*kingpin.ParseContext) error {
-	fmt.Println("exec")
 	rawsource, err := ioutil.ReadAll(c.Source)
 	if err != nil {
 		return err

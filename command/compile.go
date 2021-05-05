@@ -43,7 +43,6 @@ type compileCommand struct {
 }
 
 func (c *compileCommand) run(*kingpin.ParseContext) error {
-	fmt.Println("compile")
 	rawsource, err := ioutil.ReadAll(c.Source)
 	if err != nil {
 		return err

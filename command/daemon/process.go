@@ -5,6 +5,8 @@
 package daemon
 
 import (
+	"fmt"
+
 	"github.com/drone-runners/drone-runner-docker/engine"
 	"github.com/drone-runners/drone-runner-docker/engine/compiler"
 	"github.com/drone-runners/drone-runner-docker/engine/linter"
@@ -27,6 +29,7 @@ type processCommand struct {
 }
 
 func (c *processCommand) run(*kingpin.ParseContext) error {
+	fmt.Println("process")
 	// load the configuration from the environment
 	config, err := fromEnviron()
 	if err != nil {

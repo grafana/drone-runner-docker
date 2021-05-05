@@ -44,6 +44,7 @@ func checkPipeline(pipeline *resource.Pipeline, trusted bool) error {
 	// if err := checkNames(pipeline); err != nil {
 	// 	return err
 	// }
+	fmt.Println("Lint:", pipeline.SecretsRequired)
 	if err := checkSteps(pipeline, trusted); err != nil {
 		return err
 	}
