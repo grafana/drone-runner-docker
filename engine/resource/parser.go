@@ -6,6 +6,7 @@ package resource
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/drone/runner-go/manifest"
 
@@ -21,12 +22,15 @@ func parse(r *manifest.RawResource) (manifest.Resource, bool, error) {
 	if !match(r) {
 		return nil, false, nil
 	}
+	fmt.Println("Parse data", r.Data)
 	out := new(Pipeline)
 	err := yaml.Unmarshal(r.Data, out)
+	fmt.Println("Parsed data", out)
 	if err != nil {
 		return out, true, err
 	}
 	err = lint(out)
+	fmt.Println("Linted data", out)
 	return out, true, err
 }
 
