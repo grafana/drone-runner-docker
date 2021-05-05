@@ -6,7 +6,6 @@ package daemon
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/drone-runners/drone-runner-docker/engine"
@@ -43,7 +42,7 @@ type daemonCommand struct {
 }
 
 func (c *daemonCommand) run(*kingpin.ParseContext) error {
-	fmt.Println("daemon")
+	logrus.Infoln("daemon")
 	// load environment variables from file.
 	godotenv.Load(c.envfile)
 
