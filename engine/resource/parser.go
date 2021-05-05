@@ -22,7 +22,7 @@ func parse(r *manifest.RawResource) (manifest.Resource, bool, error) {
 	if !match(r) {
 		return nil, false, nil
 	}
-	fmt.Println("Parse data", r.Data)
+	fmt.Println("Parse data", string(r.Data))
 	out := new(Pipeline)
 	err := yaml.Unmarshal(r.Data, out)
 	fmt.Println("Parsed data", out)
