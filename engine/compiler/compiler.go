@@ -14,6 +14,7 @@ import (
 	"github.com/drone-runners/drone-runner-docker/internal/docker/image"
 
 	"github.com/drone/runner-go/clone"
+	"github.com/drone/runner-go/container"
 	"github.com/drone/runner-go/environ"
 	"github.com/drone/runner-go/environ/provider"
 	"github.com/drone/runner-go/labels"
@@ -56,12 +57,13 @@ type Resources struct {
 
 // Tmate defines tmate settings.
 type Tmate struct {
-	Image   string
-	Enabled bool
-	Server  string
-	Port    string
-	RSA     string
-	ED25519 string
+	Image          string
+	Enabled        bool
+	Server         string
+	Port           string
+	RSA            string
+	ED25519        string
+	AuthorizedKeys string
 }
 
 // Compiler compiles the Yaml configuration file to an
@@ -130,7 +132,7 @@ func (c *Compiler) Compile(ctx context.Context, args runtime.CompilerArgs) runti
 
 	// reset the workspace path if attempting to mount
 	// volumes that are internal use only.
-	if isRestrictedVolume(full) {
+	if container.IsRestrictedVolume(full) {
 		base = "/drone/src"
 		path = ""
 		full = "/drone/src"
@@ -247,6 +249,10 @@ func (c *Compiler) Compile(ctx context.Context, args runtime.CompilerArgs) runti
 		envs["DRONE_TMATE_PORT"] = c.Tmate.Port
 		envs["DRONE_TMATE_FINGERPRINT_RSA"] = c.Tmate.RSA
 		envs["DRONE_TMATE_FINGERPRINT_ED25519"] = c.Tmate.ED25519
+
+		if c.Tmate.AuthorizedKeys != "" {
+			envs["DRONE_TMATE_AUTHORIZED_KEYS"] = c.Tmate.AuthorizedKeys
+		}
 	}
 
 	// create the .netrc environment variables if not
@@ -311,6 +317,10 @@ func (c *Compiler) Compile(ctx context.Context, args runtime.CompilerArgs) runti
 		// automatically skipped.
 		if !src.When.Match(match) {
 			dst.RunPolicy = runtime.RunNever
+		}
+
+		if c.isPrivileged(src) {
+			dst.Privileged = true
 		}
 	}
 
@@ -542,7 +552,7 @@ func (c *Compiler) isPrivileged(step *resource.Step) bool {
 	// internal use only.
 	// note: this is deprecated.
 	for _, mount := range step.Volumes {
-		if isRestrictedVolume(mount.MountPath) {
+		if container.IsRestrictedVolume(mount.MountPath) {
 			return false
 		}
 	}
