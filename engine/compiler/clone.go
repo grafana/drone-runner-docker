@@ -21,7 +21,9 @@ const cloneStepName = "clone"
 func cloneImage(platform manifest.Platform) string {
 	switch platform.OS {
 	case "windows":
-		return "drone/git:latest"
+		return "drone/git:windows-1809-amd64"
+	case "linux":
+		return "drone/git:linux-arm"
 	default:
 		return "drone/git:latest"
 	}
